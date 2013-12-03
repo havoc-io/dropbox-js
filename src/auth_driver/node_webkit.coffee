@@ -29,10 +29,11 @@ class Dropbox.AuthDriver.NodeWebkit extends Dropbox.AuthDriver.BrowserBase
 
     # Launch the browser window
     browserOptions = 
+        title: 'Dropbox Authentication'
         focus: true
         toolbar: false
-        min_width: 800
-        min_height: 600
+        width: 800
+        height: 600
     browser = gui.Window.open authUrl, browserOptions
 
     # Track whether or not we've already removed our event handlers
@@ -43,9 +44,9 @@ class Dropbox.AuthDriver.NodeWebkit extends Dropbox.AuthDriver.BrowserBase
       browserUrl = browser.window.location;
       if browserUrl and @locationStateParam(browserUrl) is stateParam
         return if removed
-        browser.removeAllListeners 'loading'
-        browser.removeAllListeners 'loaded'
-        browser.removeAllListeners 'close'
+        browser.removeListener 'loading', onEvent
+        browser.removeListener 'loaded', onEvent
+        browser.removeListener 'close', onClose
         removed = true
 
         # Close the browser window
@@ -58,9 +59,9 @@ class Dropbox.AuthDriver.NodeWebkit extends Dropbox.AuthDriver.BrowserBase
     # Create callback for window close
     onClose = () =>
       return if removed
-      browser.removeAllListeners 'loading'
-      browser.removeAllListeners 'loaded'
-      browser.removeAllListeners 'close'
+      browser.removeListener 'loading', onEvent
+      browser.removeListener 'loaded', onEvent
+      browser.removeListener 'close', onClose
       removed = true
       callback new AuthError(
           'error=access_denied&error_description=User+closed+browser+window')
