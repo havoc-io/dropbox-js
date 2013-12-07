@@ -29,7 +29,16 @@ class Dropbox.AuthDriver.Cordova extends Dropbox.AuthDriver.BrowserBase
     promptPageLoaded = false
     authHost = /^[^/]*\/\/[^/]*\//.exec(authUrl)[0]
     removed = false
+
+    # Create a function to hide desktop/register links for App Store
+    hideRegister = () =>
+      # Add CSS
+      cssOptions =
+        code: '.footer{visibility:hidden;}#register-link{visibility:hidden;}'
+      browser.insertCSS cssOptions
+
     onEvent = (event) =>
+      do hideRegister if event.url.match(/login/)
       if event.url and @locationStateParam(event.url) is stateParam
         return if removed
         browser.removeEventListener 'loadstart', onEvent

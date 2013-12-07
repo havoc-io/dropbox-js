@@ -29,19 +29,33 @@ class Dropbox.AuthDriver.NodeWebkit extends Dropbox.AuthDriver.BrowserBase
 
     # Launch the browser window
     browserOptions = 
-        title: 'Dropbox Authentication'
-        focus: true
-        toolbar: false
-        width: 800
-        height: 600
+      title: 'Dropbox Authentication'
+      focus: true
+      toolbar: false
+      width: 800
+      height: 600
     browser = gui.Window.open authUrl, browserOptions
 
     # Track whether or not we've already removed our event handlers
     removed = false
 
+    # Create a function to hide desktop/register links for App Store
+    hideRegister = () =>
+      # Get the head element
+      head = (browser.window.document.getElementsByTagName 'head')[0]
+
+      # Create CSS eleemnt
+      css = browser.window.document.createElement 'style'
+      css.type = 'text/css'
+      css.appendChild browser.window.document.createTextNode '.footer{visibility:hidden;}#register-link{visibility:hidden;}'
+
+      # Add it
+      head.appendChild css
+
     # Create callback for window location change
     onEvent = () =>
-      browserUrl = browser.window.location;
+      browserUrl = browser.window.location
+      do hideRegister if browserUrl.href.match(/login/)
       if browserUrl and @locationStateParam(browserUrl) is stateParam
         return if removed
         browser.removeListener 'loading', onEvent
