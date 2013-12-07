@@ -47,7 +47,7 @@ class Dropbox.AuthDriver.NodeWebkit extends Dropbox.AuthDriver.BrowserBase
       # Create CSS eleemnt
       css = browser.window.document.createElement 'style'
       css.type = 'text/css'
-      css.appendChild browser.window.document.createTextNode '.footer{visibility:hidden;}#register-link{visibility:hidden;}'
+      css.appendChild browser.window.document.createTextNode '.footer{display:none;}#register-link{display:none;}'
 
       # Add it
       head.appendChild css

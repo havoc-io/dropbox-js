@@ -34,7 +34,7 @@ class Dropbox.AuthDriver.Cordova extends Dropbox.AuthDriver.BrowserBase
     hideRegister = () =>
       # Add CSS
       cssOptions =
-        code: '.footer{visibility:hidden;}#register-link{visibility:hidden;}'
+        code: '.footer{display:none;}#register-link{display:none;}'
       browser.insertCSS cssOptions
 
     onEvent = (event) =>
